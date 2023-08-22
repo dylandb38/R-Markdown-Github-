@@ -129,6 +129,8 @@ cb_data %>%
   arrange(desc(Age_in_days))
 ```
 
+\
+
 ```{r, echo=FALSE}
 # make this table interactive
 datatable(cb_data %>%  
@@ -137,11 +139,18 @@ datatable(cb_data %>%
 ```
 
 ## Additional exploration
-##### Embedding YouTube content: Ami:)
+\
+##### Embedding YouTube content --> Ami:)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/UBfeE8YWp3o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe
+    width="640"
+    height="480"
+    src="https://www.youtube.com/embed/UBfeE8YWp3o"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+    data-external="1"
+>
+</iframe>
 
-```{r new-exploration} 
-
-```
 
