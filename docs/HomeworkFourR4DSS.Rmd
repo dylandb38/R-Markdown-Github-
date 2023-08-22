@@ -1,0 +1,147 @@
+---
+title: "Cloudbuddy Exploratory Data Analysis"
+author: "Dylan Douglas-Brown"
+date: '2023-08-17'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    code_folding: hide
+    number_sections: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE)
+
+library(tidyverse)
+library(distill)
+library(tufte)
+library(leaflet)
+library(plotly)
+library(DT)
+library(reactable)
+library(readr)
+library(readxl)
+library(reactR)
+library(cowplot)
+
+cb_data <- read_xlsx(path = "CB_data_2023.xlsx",
+                     skip = 11,
+                     na = "-99")
+```
+\
+
+## Cloudbuddies
+
+The text below comes (mostly) from the [Marcus R Training course website](https://haswal.github.io/MaRcus/index.html): 
+
+We will have the privilege to work with data on a newly discovered being: Cloudbuddies. Cloudbuddies were first discovered in 2013 and for a decade they have been a source of confusion and frustration in the scientific community, due to, among other things, the fact that they seem to be a living, breathing, inexplicable mix of Altocumulus clouds^[See https://en.wikipedia.org/wiki/Altocumulus_cloud] and Cloudberries^[Often referred to as ["Artic Gold"](https://www.scandinaviastandard.com/a-guide-to-cloudberries-all-about-the-norths-most-sought-after-fruit/)]. Not much is known about Cloudbuddies and currently data is rather limited, but over the course of the next months more and more information will be collected and shared with us for analysis.
+
+<center>
+![](cloudbuddy.png){width=80%}
+\center
+
+## The data
+
+We can see that the dataset contains nrow(cb_data) observations with ncol(cb_data) variables. You can inspect the dataset interactively below:
+
+<br>
+
+```{r cb_data_interactive, echo=FALSE}
+# make this table interactive
+datatable(cb_data)
+```
+
+<br>
+
+## Visualization {.tabset}
+
+The data can be further explored via plots. Use the tabs below to visualize how cloudbuddies change over time.
+
+### Volume over time
+
+```{r scatterplot, echo=FALSE, warning=FALSE,message=FALSE}
+intplot<-ggplot(data = cb_data, 
+     mapping = aes(x = Age_in_days, 
+                   y = Volume)) +
+geom_point(aes(color = `Phase (color)`),
+           show.legend = FALSE) +
+geom_smooth(color = "black") +
+scale_color_manual(values = c("1-lightgray" = "lightgray",
+                              "2-darkgray" = "darkgray",
+                              "3-darkorange" = "darkorange",
+                              "4-orange" = "orange",
+                              "5-orangered" = "orangered",
+                              "6-red" = "red")) +
+theme_minimal() +
+labs(x = "Age in days", 
+     title = "Cloudbuddy volume over time")
+
+ggplotly(intplot)
+```
+
+### Histograms by phase
+
+```{r facets, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(data = cb_data,
+       aes(x = Volume, 
+           fill = `Phase (color)`)) +
+  geom_histogram(binwidth = 0.4, 
+                 show.legend = FALSE) +
+  facet_wrap(~`Phase (color)`, 
+             scales = "free") +
+  theme_bw() +
+  scale_fill_manual(values = c("1-lightgray" = "lightgray",
+                               "2-darkgray" = "darkgray",
+                               "3-darkorange" = "darkorange",
+                               "4-orange" = "orange",
+                               "5-orangered" = "orangered",
+                               "6-red" = "red"))
+```
+
+### Age in days
+
+```{r linegraph, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(cb_data, 
+       aes(x = Age_in_days,
+           y = Volume)) +
+  geom_smooth(aes(group = Cloudbuddy), 
+              se = FALSE, 
+              linewidth = 0.25,
+              color = "black") +
+  theme_minimal() +
+  labs(x = "Age in days")
+```
+
+<br>
+\
+
+## Elderly cloudbuddies
+
+Future investigations may choose to focus on the elderly population of cloudbuddies (those 70 days or older). The table below shows the subset of cloudbuddies who meet this criterion. 
+
+```{r, eval=FALSE,echo=TRUE}
+cb_data %>% 
+  filter(Age_in_days >= 70) %>% 
+  arrange(desc(Age_in_days))
+```
+
+```{r, echo=FALSE}
+# make this table interactive
+datatable(cb_data %>%  
+  filter(Age_in_days >= 70) %>% 
+  arrange(desc(Age_in_days)))
+```
+
+## Additional exploration
+##### Embedding YouTube content: Ami:)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UBfeE8YWp3o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+```{r new-exploration} 
+
+```
+
